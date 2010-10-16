@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>maca adam mi lazim?</title>
+    <link type="text/css" rel="stylesheet" href="static/css/index.css" />
+    <script type="text/javascript" src="/static/js/raphael-min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-1.4.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.editinplace.js"></script>
+  </head>
+  <body>
+    <h1>maca adam mi lazim?</h1>
+    <div>
+      {% for redplayer in redplayers %}
+      <img src="/static/images/redshirt.png" class="playericon"/><br />
+      {% endfor %}
+    </div>
+    <div id="soccerfield"><!--img src="/static/images/soccer-field-empty.png"/--></div>
+    <div>
+      {% for redplayer in redplayers %}
+      <img src="/static/images/blueshirt.png" class="playericon"/><br />
+      {% endfor %}
+    </div>
+    <div id="editme5" class="playername">player1</div>
+    <script type="text/javascript">
+
+var paper = Raphael("soccerfield", 780, 496);
+var image = paper.image("/static/images/redshirt.png", 0, 5, 25, 20);
+var start = function () {
+    // storing original coordinates
+    this.ox = this.attr("x");
+    this.oy = this.attr("y");
+    this.otx = $('#editme5').position().left;
+    this.oty = $('#editme5').position().top;
+    this.attr({opacity: .5});
+},
+move = function (dx, dy) {
+  // console.log("x:%o, y:%o, a: %o", dx, dy, { "left": (this.otx + dx) + "px", "top":this.oty + dy + "px" });
+  $('#editme5').css( { "left": (this.otx + dx) + "px", "top":this.oty + dy + "px" } );
+  this.attr({x: this.ox + dx, y: this.oy + dy});
+},
+up = function () {
+  // restoring state
+  this.attr({opacity: 1});
+};
+image.drag(move, start, up);
+
+$("#editme5").editInPlace({
+saving_animation_color: "#ECF2F8",
+callback: function(idOfEditor, enteredText, orinalHTMLContent, settingsParams, animationCallbacks) {
+animationCallbacks.didStartSaving();
+setTimeout(animationCallbacks.didEndSaving, 2000);
+return enteredText;
+}
+});
+    </script>
+  </body>
+</html>

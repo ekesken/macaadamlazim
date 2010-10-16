@@ -1,0 +1,4 @@
+div { float: left}
+img { margin: 5px 5px 5px 5px}
+#soccerfield { background-image:url('/static/images/soccer-field-empty.png');)}
+.playername { font-size: 10px; position: absolute; }
