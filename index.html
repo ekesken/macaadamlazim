@@ -12,13 +12,13 @@
   <body>
     <div id="loading"><img src="/static/images/loader.gif" /></div>
     <div id="maindiv" style="display: none;">
-      <div>
-        {% for player in players %}
-        <player name="{{player.name}}" left="{{player.left}}" top="{{player.top}}" color="{{player.color}}"></player>
-        {% endfor %}
-      </div>
       <div id="sketchpad"></div>
       <div id="soccerfield"></div>
+    </div>
+    <div style="display:none;">
+      {% for player in players %}
+      <player name="{{player.name}}" left="{{player.left}}" top="{{player.top}}" color="{{player.color}}"></player>
+      {% endfor %}
     </div>
   </body>
 </html>

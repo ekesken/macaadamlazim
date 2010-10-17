@@ -19,7 +19,10 @@ import os
 class MainIndex(webapp.RequestHandler):
     def get(self):
         path = os.path.join(os.path.dirname(__file__), 'index.html')
-        players = [{"name": "player1", "left": 5, "top": 20, "color": "red"}, {"name": "player2", "left": 750, "top": 20, "color": "blue"}]
+        players = [
+            {"name": "player1", "left": 5, "top": 20, "color": "red"},
+            {"name": "player2", "left": 750, "top": 20, "color": "blue"}
+        ]
         values = {
             'players': players,
         }

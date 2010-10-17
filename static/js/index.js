@@ -43,6 +43,7 @@ Raphael.fn.addPlayer = function (name, x, y, color, sketchpad) {
     });
   setTimeout(function() {
       var initialTextPosition = textPosition(image.node);
+      // console.log("initialTextPosition: %o", initialTextPosition);
       $(text).offset({"left": initialTextPosition.x, "top": initialTextPosition.y});
     }, 100);
   var start = function () {
@@ -51,14 +52,15 @@ Raphael.fn.addPlayer = function (name, x, y, color, sketchpad) {
     this.ox = this.attr("x");
     this.oy = this.attr("y");
     var newTextPosition = textPosition(this.node);
+    // console.log("newTextPosition: %o", newTextPosition);
     this.otx = newTextPosition.x;
     this.oty = newTextPosition.y;
     this.attr({opacity: .5});
   };
   var move = function (dx, dy) {
-    // console.log("x:%o, y:%o, a: %o", dx, dy, { "left": (this.otx + dx) + "px", "top":this.oty + dy + "px" });
-    $(text).offset( { "left": (this.otx + dx), "top":this.oty + dy } );
-    this.attr({x: this.ox + dx, y: this.oy + dy});
+    $(text).offset( { "left": (this.otx + dx), "top": (this.oty + dy) } );
+    this.attr({x: parseInt(this.ox) + dx, y:  parseInt(this.oy) + dy});
+    // console.log("dx:%o, dy:%o, ox: %o, oy: %o, new ox: %o, new oy: %o", dx, dy, this.ox, this.oy, this.attr("x"), this.attr(y));
   };
   var up = function () {
     // restoring state
