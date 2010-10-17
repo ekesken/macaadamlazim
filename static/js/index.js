@@ -7,11 +7,12 @@ $(window).load(function() {
       });
     sketchpad.pen().color("#FFFF00");
     $("player").each(function(index, player) {
+        var playerid = $(player).attr("id");
         var name = $(player).attr("name");
         var left = $(player).attr("left");
         var top = $(player).attr("top");
         var color = $(player).attr("color");
-        sketchpad.paper().addPlayer(name, left, top, color, sketchpad);
+        sketchpad.paper().addPlayer(playerid, name, left, top, color, sketchpad);
         // it wasn't possible to add function to sketchpad itself, so
         // we have to pass it as a parameter
     });
@@ -22,7 +23,7 @@ $(window).load(function() {
 });
 
 // raphael addons
-Raphael.fn.addPlayer = function (name, x, y, color, sketchpad) {
+Raphael.fn.addPlayer = function (playerid, name, x, y, color, sketchpad) {
   var image = this.image("/static/images/" + color + "shirt.png", x, y, 25, 20);
   var text = $("<div/>").appendTo($("body")).addClass("playername").html(name);
   var textPosition = function(icon) {
@@ -38,6 +39,12 @@ Raphael.fn.addPlayer = function (name, x, y, color, sketchpad) {
         $(text).offset({"left": newTextPosition.x, "top": newTextPosition.y});
         animationCallbacks.didStartSaving();
         setTimeout(animationCallbacks.didEndSaving, 2000);
+        $.post("/players", {
+            "playerid": playerid,
+            "newname": enteredText,
+            "newleft": image.attr("x"),
+            "newtop": image.attr("y")
+        });
         return enteredText;
       }
     });
@@ -66,6 +73,12 @@ Raphael.fn.addPlayer = function (name, x, y, color, sketchpad) {
     // restoring state
     this.attr({opacity: 1});
     sketchpad.editing(true);
+    $.post("/players", {
+        "playerid": playerid,
+        "newname": $(text).html(),
+        "newleft": image.attr("x"),
+        "newtop": image.attr("y")
+    });
   };
   image.drag(move, start, up);
 };
