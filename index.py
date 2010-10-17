@@ -19,11 +19,9 @@ import os
 class MainIndex(webapp.RequestHandler):
     def get(self):
         path = os.path.join(os.path.dirname(__file__), 'index.html')
-        redplayers = range(1, 7)
-        blueplayers = range(1, 7)
+        players = [{"name": "player1", "left": 5, "top": 20, "color": "red"}, {"name": "player2", "left": 750, "top": 20, "color": "blue"}]
         values = {
-            'redplayers': redplayers,
-            'blueplayers': blueplayers
+            'players': players,
         }
         self.response.out.write(template.render(path, values))
         return

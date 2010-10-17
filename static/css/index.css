@@ -1,4 +1,7 @@
-div { float: left}
-img { margin: 5px 5px 5px 5px}
+body { background-image:url('/static/images/grass.jpg'); }
+div { float: left; }
+img { margin: 10px 10px 10px 10px}
 #soccerfield { background-image:url('/static/images/soccer-field-empty.png');)}
-.playername { font-size: 10px; position: absolute; }
+#sketchpad { position: absolute;)}
+.playername { font-size: 14px; position: absolute; }
+.mydiv {  margin-left: auto; margin-right: auto;  }
