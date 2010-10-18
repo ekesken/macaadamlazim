@@ -27,14 +27,20 @@ class MainPlayers(webapp.RequestHandler):
         try:
             playerid = self.request.get('playerid')
             newname = self.request.get('newname')
+            newcolor = self.request.get('newcolor')
             newleft = int(self.request.get('newleft'))
             newtop = int(self.request.get('newtop'))
-            if playerid is None or newname is None or len(newname) == 0:
+            if playerid is None \
+                   or newname is None \
+                   or len(newname) == 0 \
+                   or (newcolor != 'red' and newcolor != 'blue'):
+                self.response.out.write("playerid: '%s', newname: '%s', newcolor: '%s'\n" % (playerid, newname, newcolor))
                 raise
             players = db.GqlQuery("SELECT * FROM Player WHERE __key__=:id", id=Key(playerid));
             playerToModify = players[0];
             # self.response.out.write("got player =>" + playerToModify.name)
             playerToModify.name = newname[0:15]
+            playerToModify.color = newcolor
             playerToModify.left = newleft
             playerToModify.top = newtop
             playerToModify.put()

@@ -12,19 +12,41 @@ $(window).load(function() {
         var left = $(player).attr("left");
         var top = $(player).attr("top");
         var color = $(player).attr("color");
-        sketchpad.paper().addPlayer(playerid, name, left, top, color, fieldWidth, fieldHeight, sketchpad);
+        sketchpad.paper().addPlayer(playerid, name, left, top, fieldWidth, fieldHeight, sketchpad);
         // it wasn't possible to add function to sketchpad itself, so
         // we have to pass it as a parameter
     });
     $("#soccerfield").width(fieldWidth).height(fieldHeight);
     $("#loading").hide();
     $("#maindiv").show().center();
-
+    $('#sharelink').click(function (e) {
+        var shareurl = "http://maca.adamlazim.com/";
+        $("player").each(function(index, player) {
+            var name = $(player).attr("name");
+            var left = $(player).attr("left");
+            var top = $(player).attr("top");
+            shareurl += name + ":" + left + "," + top + ";"
+        });
+        $('#sharebox>input').val(shareurl)
+        $('#sharebox').modal(); 
+        return false;
+    });
+    $('#resetlink').click(function (e) {
+        var reseturl = "http://localhost:8080/-1:110,430;-1:150,430;-1:190,430;-1:230,430;-1:270,430;-1:310,430;-1:350,430;-1:400,430;-1:440,430;-1:480,430;-1:520,430;-1:560,430;-1:600,430;-1:640,430;"
+        location.href = reseturl;
+    });
 });
 
 // raphael addons
-Raphael.fn.addPlayer = function (playerid, name, x, y, color, fieldWidth, fieldHeight, sketchpad) {
-  var shirt = this.image("/static/images/" + color + "shirt.png", x, y, 25, 20);
+Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, sketchpad) {
+  var player = {
+    "playerid": playerid,
+    "name": name,
+    "color": (x < (fieldWidth / 2)) ? "red" : "blue",
+    "x": x,
+    "y": y
+  }
+  var shirt = this.image("/static/images/" + player.color + "shirt.png", x, y, 25, 20);
   var shirtWidth = 25;
   var shirtHeight = 20;
   var text = $("<div/>").appendTo($("body")).addClass("playername").html(name);
@@ -37,15 +59,18 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, color, fieldWidth, fieldH
   $(text).editInPlace({
       saving_animation_color: "#ECF2F8",
       callback: function(idOfEditor, enteredText, orinalHTMLContent, settingsParams, animationCallbacks) {
-        var newTextPosition = textPosition(image.node);
+        var newTextPosition = textPosition(shirt.node);
         $(text).offset({"left": newTextPosition.x, "top": newTextPosition.y});
         animationCallbacks.didStartSaving();
         setTimeout(animationCallbacks.didEndSaving, 2000);
+	var newleft = shirt.attr("x");
+	var newtop = shirt.attr("y");
+	$('#' + playerid).attr("name", newname).attr("left", newleft).attr("top", newtop);
         $.post("/players", {
             "playerid": playerid,
             "newname": enteredText,
-            "newleft": shirt.attr("x"),
-            "newtop": shirt.attr("y")
+            "newleft": newleft,
+            "newtop": newtop
         });
         return enteredText;
       }
@@ -79,23 +104,38 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, color, fieldWidth, fieldH
     } else if (newy < 0) {
       newy = 0;
     }
+    if (newx < (fieldWidth / 2)) {
+      player.color = "red";
+    } else {
+      player.color = "blue";
+    }
+    shirt.attr("src", "/static/images/" + player.color + "shirt.png");
     dx = newx - this.ox;
     dy = newy - this.oy;
     $(text).offset( { "left": (this.otx + dx), "top": (this.oty + dy) } );
     this.attr({x: newx, y:  newy});
     // console.log("dx:%o, dy:%o, ox: %o, oy: %o, new ox: %o, new oy: %o", dx, dy, this.ox, this.oy, this.attr("x"), this.attr(y));
   };
+  var updatePlayerInDb = function() {
+      var newname = $(text).html();
+      var newleft = shirt.attr("x");
+      var newtop = shirt.attr("y");
+      $('#' + playerid).attr("name", newname).attr("color", player.color).attr("left", newleft).attr("top", newtop);
+      $.post("/players", {
+	  "playerid": playerid,
+	  "newname": newname,
+          "newcolor": player.color,
+          "newleft": newleft,
+          "newtop": newtop
+      });
+  }
   var up = function () {
     // restoring state
     this.attr({opacity: 1});
     sketchpad.editing(true);
-    $.post("/players", {
-        "playerid": playerid,
-        "newname": $(text).html(),
-        "newleft": shirt.attr("x"),
-        "newtop": shirt.attr("y")
-    });
+    updatePlayerInDb();
   };
+  updatePlayerInDb(); // for color update
   shirt.drag(move, start, up);
 };
 

@@ -5,6 +5,7 @@
     <link type="text/css" rel="stylesheet" href="static/css/index.css" />
     <script type="text/javascript" src="/static/js/jquery-1.4.3.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.editinplace.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.simplemodal.js"></script>
     <script type="text/javascript" src="/static/js/raphael-min.js"></script>
     <script type="text/javascript" src="/static/js/raphael.sketchpad.js"></script>
     <script type="text/javascript" src="/static/js/index.js"></script>
@@ -13,7 +14,14 @@
     <div id="loading"><img src="/static/images/loader.gif" /></div>
     <div id="maindiv" style="display: none;">
       <div id="sketchpad"></div>
-      <div id="soccerfield"></div>
+      <div id="soccerfield"></div><br />
+      <div id="links">
+	<div id="resetlink">istiklal marşı için...</div>
+	<div id="sharelink">paylaş</div>
+      </div>
+    </div>
+    <div id="sharebox">
+      <input type="text" value="http://maca.adamlazim.com/evren:15,10;messi:5,60;onur.k:5,110;ekesken:5,160;ilhan:5,210;bugra:5,260;ozgur:5,310;serhat:5,360;eser:5,410;hilmi:5,460" />
     </div>
     <div style="display:none;">
       {% for player in players %}

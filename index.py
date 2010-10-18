@@ -19,6 +19,24 @@ from player import Player
 class MainIndex(webapp.RequestHandler):
     def get(self):
         path = os.path.join(os.path.dirname(__file__), 'index.html')
+        save = self.request.path[1:]
+        savedplayers = []
+        # print "count: %d, save: %s" % (len(save.split("%3B")), save)
+        if save:
+            for savedplayer in save.split("%3B"): #;
+                parts = savedplayer.split("%3A") #:
+                if len(parts) != 2:
+                    # print "break for %s" % (savedplayer)
+                    break
+                name = parts[0]
+                position = parts[1].split("%2C") #,
+                if len(position) != 2:
+                    # print "break for %s" % (savedplayer)
+                    break
+                left = position[0]
+                top = position[1]
+                # print "name: " + name + ", left:" + left + ", top:" + top
+                savedplayers.append({"name": name, "left": left, "top": top})
 #         players = [
 #            {"name": "player1", "left": 5, "top": 20, "color": "red"},
 #            {"name": "player2", "left": 5, "top": 70, "color": "red"},
@@ -35,9 +53,38 @@ class MainIndex(webapp.RequestHandler):
 #            {"name": "player6", "left": 750, "top": 270, "color": "blue"},
 #            {"name": "player7", "left": 750, "top": 320, "color": "blue"}
 #         ]
-        players = db.GqlQuery("SELECT * FROM Player");
+#         for player in players:
+#             newplayer = Player()
+#             newplayer.name = player["name"]
+#             newplayer.left = player["left"]
+#             newplayer.top = player["top"]
+#             newplayer.color = player["color"]
+#             newplayer.put();
+        dbplayers = db.GqlQuery("SELECT * FROM Player");
+        resttop = 5;
+        # TODO: optimize here!
+        jsplayers = []
+        if len(savedplayers) > 0:
+            for player in dbplayers:
+                try:
+                    savedplayer = savedplayers.pop()
+                    newname = savedplayer["name"]
+                    if newname != "-1":
+                        player.name = newname
+                    player.left = int(savedplayer["left"])
+                    player.top = int(savedplayer["top"])
+                except IndexError:
+                    player.left = 750
+                    player.top = resttop
+                    # print "resting name:%s, left:%d, top:%d" % (player.name, player.left, player.top)
+                    resttop += 50;
+                jsplayers.append(player)
+        else:
+            jsplayers = dbplayers
+        #for player in jsplayers:
+        #    print "player name:%s, left:%d, top:%d" % (player.name, player.left, player.top)
         values = {
-            'players': players,
+            'players': jsplayers,
         }
         self.response.out.write(template.render(path, values))
         return
