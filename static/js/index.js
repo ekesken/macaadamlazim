@@ -28,12 +28,13 @@ $(window).load(function() {
             shareurl += name + ":" + left + "," + top + ";"
         });
         $('#sharebox>input').val(shareurl)
-        $('#sharebox').modal(); 
+        $('#sharebox').modal();
         return false;
     });
     $('#resetlink').click(function (e) {
-        var reseturl = "http://localhost:8080/-1:110,430;-1:150,430;-1:190,430;-1:230,430;-1:270,430;-1:310,430;-1:350,430;-1:400,430;-1:440,430;-1:480,430;-1:520,430;-1:560,430;-1:600,430;-1:640,430;"
+        var reseturl = "/-1:110,430;-1:150,430;-1:190,430;-1:230,430;-1:270,430;-1:310,430;-1:350,430;-1:400,430;-1:440,430;-1:480,430;-1:520,430;-1:560,430;-1:600,430;-1:640,430;"
         location.href = reseturl;
+        return false;
     });
 });
 
@@ -63,12 +64,13 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, 
         $(text).offset({"left": newTextPosition.x, "top": newTextPosition.y});
         animationCallbacks.didStartSaving();
         setTimeout(animationCallbacks.didEndSaving, 2000);
-	var newleft = shirt.attr("x");
-	var newtop = shirt.attr("y");
-	$('#' + playerid).attr("name", newname).attr("left", newleft).attr("top", newtop);
+        var newname = enteredText;
+        var newleft = shirt.attr("x");
+        var newtop = shirt.attr("y");
+        $('#' + playerid).attr("name", newname).attr("left", newleft).attr("top", newtop);
         $.post("/players", {
             "playerid": playerid,
-            "newname": enteredText,
+            "newname": newname,
             "newleft": newleft,
             "newtop": newtop
         });
@@ -122,8 +124,8 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, 
       var newtop = shirt.attr("y");
       $('#' + playerid).attr("name", newname).attr("color", player.color).attr("left", newleft).attr("top", newtop);
       $.post("/players", {
-	  "playerid": playerid,
-	  "newname": newname,
+    "playerid": playerid,
+    "newname": newname,
           "newcolor": player.color,
           "newleft": newleft,
           "newtop": newtop
