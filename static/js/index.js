@@ -12,7 +12,7 @@ $(window).load(function() {
         var left = $(player).attr("left");
         var top = $(player).attr("top");
         var color = $(player).attr("color");
-        sketchpad.paper().addPlayer(playerid, name, left, top, color, sketchpad);
+        sketchpad.paper().addPlayer(playerid, name, left, top, color, fieldWidth, fieldHeight, sketchpad);
         // it wasn't possible to add function to sketchpad itself, so
         // we have to pass it as a parameter
     });
@@ -23,13 +23,15 @@ $(window).load(function() {
 });
 
 // raphael addons
-Raphael.fn.addPlayer = function (playerid, name, x, y, color, sketchpad) {
-  var image = this.image("/static/images/" + color + "shirt.png", x, y, 25, 20);
+Raphael.fn.addPlayer = function (playerid, name, x, y, color, fieldWidth, fieldHeight, sketchpad) {
+  var shirt = this.image("/static/images/" + color + "shirt.png", x, y, 25, 20);
+  var shirtWidth = 25;
+  var shirtHeight = 20;
   var text = $("<div/>").appendTo($("body")).addClass("playername").html(name);
   var textPosition = function(icon) {
     return {
-      x: $(icon).offset().left - (($(text).width() - 25) / 2),
-      y: $(icon).offset().top + 25
+      x: $(icon).offset().left - (($(text).width() - shirtWidth) / 2),
+      y: $(icon).offset().top + shirtHeight + 5
     };
   };
   $(text).editInPlace({
@@ -42,14 +44,14 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, color, sketchpad) {
         $.post("/players", {
             "playerid": playerid,
             "newname": enteredText,
-            "newleft": image.attr("x"),
-            "newtop": image.attr("y")
+            "newleft": shirt.attr("x"),
+            "newtop": shirt.attr("y")
         });
         return enteredText;
       }
     });
   setTimeout(function() {
-      var initialTextPosition = textPosition(image.node);
+      var initialTextPosition = textPosition(shirt.node);
       // console.log("initialTextPosition: %o", initialTextPosition);
       $(text).offset({"left": initialTextPosition.x, "top": initialTextPosition.y});
     }, 100);
@@ -65,8 +67,22 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, color, sketchpad) {
     this.attr({opacity: .5});
   };
   var move = function (dx, dy) {
+    var newx = parseInt(this.ox) + dx;
+    var newy = parseInt(this.oy) + dy;
+    if (newx > fieldWidth) {
+      newx = fieldWidth - shirtWidth;
+    } else if (newx < 0) {
+      newx = 0;
+    }
+    if (newy > fieldHeight) {
+      newy = fieldHeight - (2 * shirtHeight);
+    } else if (newy < 0) {
+      newy = 0;
+    }
+    dx = newx - this.ox;
+    dy = newy - this.oy;
     $(text).offset( { "left": (this.otx + dx), "top": (this.oty + dy) } );
-    this.attr({x: parseInt(this.ox) + dx, y:  parseInt(this.oy) + dy});
+    this.attr({x: newx, y:  newy});
     // console.log("dx:%o, dy:%o, ox: %o, oy: %o, new ox: %o, new oy: %o", dx, dy, this.ox, this.oy, this.attr("x"), this.attr(y));
   };
   var up = function () {
@@ -76,11 +92,11 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, color, sketchpad) {
     $.post("/players", {
         "playerid": playerid,
         "newname": $(text).html(),
-        "newleft": image.attr("x"),
-        "newtop": image.attr("y")
+        "newleft": shirt.attr("x"),
+        "newtop": shirt.attr("y")
     });
   };
-  image.drag(move, start, up);
+  shirt.drag(move, start, up);
 };
 
 // jquery addons
