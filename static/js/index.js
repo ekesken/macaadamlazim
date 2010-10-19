@@ -25,14 +25,14 @@ $(window).load(function() {
             var name = $(player).attr("name");
             var left = $(player).attr("left");
             var top = $(player).attr("top");
-            shareurl += name + ":" + left + "," + top + ";"
+            shareurl += name + ":" + left + "," + top + "|"
         });
         $('#sharebox>input').val(shareurl)
         $('#sharebox').modal();
         return false;
     });
     $('#resetlink').click(function (e) {
-        var reseturl = "/-1:110,430;-1:150,430;-1:190,430;-1:230,430;-1:270,430;-1:310,430;-1:350,430;-1:400,430;-1:440,430;-1:480,430;-1:520,430;-1:560,430;-1:600,430;-1:640,430;"
+        var reseturl = "/-1:110,430|-1:150,430|-1:190,430|-1:230,430|-1:270,430|-1:310,430|-1:350,430|-1:400,430|-1:440,430|-1:480,430|-1:520,430|-1:560,430|-1:600,430|-1:640,430|"
         location.href = reseturl;
         return false;
     });

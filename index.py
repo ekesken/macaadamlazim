@@ -21,9 +21,9 @@ class MainIndex(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'index.html')
         save = self.request.path[1:]
         savedplayers = []
-        # print "count: %d, save: %s" % (len(save.split("%3B")), save)
+        # print "count: %d, save: %s" % (len(save.split("%7C")), save)
         if save:
-            for savedplayer in save.split("%3B"): #;
+            for savedplayer in save.split("%7C"): #|
                 parts = savedplayer.split("%3A") #:
                 if len(parts) != 2:
                     # print "break for %s" % (savedplayer)
