@@ -1,0 +1,17 @@
+a sketchboard for soccer game on which you can set positions and names of
+players and do some chalk drawing.
+
+you can share the positions and names you set by a link after you finish your
+job.
+
+there is a single global sketchboard, every move you do is saved on server
+except chalk moves. 
+
+TODO:
+-----
+[ ] should remember colors of players at latest order on resets.
+
+KNOWN BUGS:
+-----------
+[ ] player name text positioning problem in iceweasel. 
+

@@ -52,10 +52,15 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, 
   var shirtHeight = 20;
   var text = $("<div/>").appendTo($("body")).addClass("playername").html(name);
   var textPosition = function(icon) {
-    return {
+    var newTextPosition = {
       x: $(icon).offset().left - (($(text).width() - shirtWidth) / 2),
       y: $(icon).offset().top + shirtHeight + 5
     };
+    if (window.opera) {
+      newTextPosition.x += $("#maindiv").offset().left;
+      newTextPosition.y += $("#maindiv").offset().top;
+    }
+    return newTextPosition;
   };
   $(text).editInPlace({
       saving_animation_color: "#ECF2F8",
@@ -114,8 +119,9 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, 
     shirt.attr("src", "/static/images/" + player.color + "shirt.png");
     dx = newx - this.ox;
     dy = newy - this.oy;
-    $(text).offset( { "left": (this.otx + dx), "top": (this.oty + dy) } );
     this.attr({x: newx, y:  newy});
+    var newTextPosition = textPosition(shirt.node);
+    $(text).offset({"left": newTextPosition.x, "top": newTextPosition.y});
     // console.log("dx:%o, dy:%o, ox: %o, oy: %o, new ox: %o, new oy: %o", dx, dy, this.ox, this.oy, this.attr("x"), this.attr(y));
   };
   var updatePlayerInDb = function() {

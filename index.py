@@ -21,45 +21,45 @@ class MainIndex(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'index.html')
         save = self.request.path[1:]
         savedplayers = []
-        # print "count: %d, save: %s" % (len(save.split("%7C")), save)
+        logging.debug("count: %d, save: %s" % (len(save.split("%7C")), save))
         if save:
             for savedplayer in save.split("%7C"): #|
                 parts = savedplayer.split("%3A") #:
                 if len(parts) != 2:
-                    # print "break for %s" % (savedplayer)
+                    logging.debug("break for %s" % (savedplayer))
                     break
                 name = parts[0]
                 position = parts[1].split("%2C") #,
                 if len(position) != 2:
-                    # print "break for %s" % (savedplayer)
+                    logging.debug("break for %s" % (savedplayer))
                     break
                 left = position[0]
                 top = position[1]
-                # print "name: " + name + ", left:" + left + ", top:" + top
+                logging.debug("name: " + name + ", left:" + left + ", top:" + top)
                 savedplayers.append({"name": name, "left": left, "top": top})
-#         players = [
-#            {"name": "player1", "left": 5, "top": 20, "color": "red"},
-#            {"name": "player2", "left": 5, "top": 70, "color": "red"},
-#            {"name": "player3", "left": 5, "top": 120, "color": "red"},
-#            {"name": "player4", "left": 5, "top": 170, "color": "red"},
-#            {"name": "player5", "left": 5, "top": 220, "color": "red"},
-#            {"name": "player6", "left": 5, "top": 270, "color": "red"},
-#            {"name": "player7", "left": 5, "top": 320, "color": "red"},
-#            {"name": "player1", "left": 750, "top": 20, "color": "blue"},
-#            {"name": "player2", "left": 750, "top": 70, "color": "blue"},
-#            {"name": "player3", "left": 750, "top": 120, "color": "blue"},
-#            {"name": "player4", "left": 750, "top": 170, "color": "blue"},
-#            {"name": "player5", "left": 750, "top": 220, "color": "blue"},
-#            {"name": "player6", "left": 750, "top": 270, "color": "blue"},
-#            {"name": "player7", "left": 750, "top": 320, "color": "blue"}
-#         ]
-#         for player in players:
-#             newplayer = Player()
-#             newplayer.name = player["name"]
-#             newplayer.left = player["left"]
-#             newplayer.top = player["top"]
-#             newplayer.color = player["color"]
-#             newplayer.put();
+        # players = [
+        #    {"name": "player1", "left": 5, "top": 20, "color": "red"},
+        #    {"name": "player2", "left": 5, "top": 70, "color": "red"},
+        #    {"name": "player3", "left": 5, "top": 120, "color": "red"},
+        #    {"name": "player4", "left": 5, "top": 170, "color": "red"},
+        #    {"name": "player5", "left": 5, "top": 220, "color": "red"},
+        #    {"name": "player6", "left": 5, "top": 270, "color": "red"},
+        #    {"name": "player7", "left": 5, "top": 320, "color": "red"},
+        #    {"name": "player1", "left": 750, "top": 20, "color": "blue"},
+        #    {"name": "player2", "left": 750, "top": 70, "color": "blue"},
+        #    {"name": "player3", "left": 750, "top": 120, "color": "blue"},
+        #    {"name": "player4", "left": 750, "top": 170, "color": "blue"},
+        #    {"name": "player5", "left": 750, "top": 220, "color": "blue"},
+        #    {"name": "player6", "left": 750, "top": 270, "color": "blue"},
+        #    {"name": "player7", "left": 750, "top": 320, "color": "blue"}
+        # ]
+        # for player in players:
+        #     newplayer = Player()
+        #     newplayer.name = player["name"]
+        #     newplayer.left = player["left"]
+        #     newplayer.top = player["top"]
+        #     newplayer.color = player["color"]
+        #     newplayer.put();
         dbplayers = db.GqlQuery("SELECT * FROM Player");
         resttop = 5;
         # TODO: optimize here!
@@ -81,8 +81,8 @@ class MainIndex(webapp.RequestHandler):
                 jsplayers.append(player)
         else:
             jsplayers = dbplayers
-        #for player in jsplayers:
-        #    print "player name:%s, left:%d, top:%d" % (player.name, player.left, player.top)
+        for player in jsplayers:
+            logging.debug("player name:%s, left:%d, top:%d" % (player.name, player.left, player.top))
         values = {
             'players': jsplayers,
         }
