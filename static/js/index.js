@@ -52,11 +52,15 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, 
   var shirtHeight = 20;
   var text = $("<div/>").appendTo($("body")).addClass("playername").html(name);
   var textPosition = function(icon) {
+    var x = parseInt(icon.getAttribute("x"));
+    var y = parseInt(icon.getAttribute("y"));
+    x = isNaN(x) ? $(icon).offset().left : x;
+    y = isNaN(y) ? $(icon).offset().top : y;
     var newTextPosition = {
-      x: $(icon).offset().left - (($(text).width() - shirtWidth) / 2),
-      y: $(icon).offset().top + shirtHeight + 5
+      x: x - (($(text).width() - shirtWidth) / 2),
+      y: y + shirtHeight + 5
     };
-    if (window.opera) {
+    if (window.XMLHttpRequest) { // if not ie6
       newTextPosition.x += $("#maindiv").offset().left;
       newTextPosition.y += $("#maindiv").offset().top;
     }

@@ -10,8 +10,10 @@ except chalk moves.
 TODO:
 -----
 [ ] should remember colors of players at latest order on resets.
+[ ] should use scoped boards to share real time data between visitors.
 
 KNOWN BUGS:
 -----------
-[ ] player name text positioning problem in iceweasel. 
+[ ] positioning of scretches on board is wrong for some versions of firefox and
+opera (ex: opera 10.10 for mac, firefox 3.6.12 for mac)
 
