@@ -60,7 +60,7 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, 
       x: x - (($(text).width() - shirtWidth) / 2),
       y: y + shirtHeight + 5
     };
-    if (window.XMLHttpRequest) { // if not ie6
+    if (!$.browser.msie) { // if not internet explorer
       newTextPosition.x += $("#maindiv").offset().left;
       newTextPosition.y += $("#maindiv").offset().top;
     }
