@@ -68,7 +68,7 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, 
   };
   $(text).editInPlace({
       saving_animation_color: "#ECF2F8",
-      callback: function(idOfEditor, enteredText, orinalHTMLContent, settingsParams, animationCallbacks) {
+      callback: function(idOfEditor, enteredText, orjinalHTMLContent, settingsParams, animationCallbacks) {
         var newTextPosition = textPosition(shirt.node);
         $(text).offset({"left": newTextPosition.x, "top": newTextPosition.y});
         animationCallbacks.didStartSaving();
@@ -76,13 +76,13 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, 
         var newname = enteredText;
         var newleft = shirt.attr("x");
         var newtop = shirt.attr("y");
-        $('#' + playerid).attr("name", newname).attr("left", newleft).attr("top", newtop);
-        $.post("/players", {
-            "playerid": playerid,
-            "newname": newname,
-            "newleft": newleft,
-            "newtop": newtop
-        });
+        $('player[name=' + orjinalHTMLContent + ']').attr("name", newname).attr("left", newleft).attr("top", newtop);
+        // $.post("/players", {
+        //     "playerid": playerid,
+        //     "newname": newname,
+        //     "newleft": newleft,
+        //     "newtop": newtop
+        // });
         return enteredText;
       }
     });
@@ -127,27 +127,29 @@ Raphael.fn.addPlayer = function (playerid, name, x, y, fieldWidth, fieldHeight, 
     var newTextPosition = textPosition(shirt.node);
     $(text).offset({"left": newTextPosition.x, "top": newTextPosition.y});
     // console.log("dx:%o, dy:%o, ox: %o, oy: %o, new ox: %o, new oy: %o", dx, dy, this.ox, this.oy, this.attr("x"), this.attr(y));
+    var playername = $(text).html()
+    $('player[name=' + playername + ']').attr("left", newTextPosition.x).attr("top", newTextPosition.y);
   };
-  var updatePlayerInDb = function() {
-      var newname = $(text).html();
-      var newleft = shirt.attr("x");
-      var newtop = shirt.attr("y");
-      $('#' + playerid).attr("name", newname).attr("color", player.color).attr("left", newleft).attr("top", newtop);
-      $.post("/players", {
-    "playerid": playerid,
-    "newname": newname,
-          "newcolor": player.color,
-          "newleft": newleft,
-          "newtop": newtop
-      });
-  }
+  // var updatePlayerInDb = function() {
+  //     var newname = $(text).html();
+  //     var newleft = shirt.attr("x");
+  //     var newtop = shirt.attr("y");
+  //     $('#' + playerid).attr("name", newname).attr("color", player.color).attr("left", newleft).attr("top", newtop);
+  //     $.post("/players", {
+  //   "playerid": playerid,
+  //   "newname": newname,
+  //         "newcolor": player.color,
+  //         "newleft": newleft,
+  //         "newtop": newtop
+  //     });
+  // }
   var up = function () {
     // restoring state
     this.attr({opacity: 1});
     sketchpad.editing(true);
-    updatePlayerInDb();
+    // updatePlayerInDb();
   };
-  updatePlayerInDb(); // for color update
+  // updatePlayerInDb(); // for color update
   shirt.drag(move, start, up);
 };
 
