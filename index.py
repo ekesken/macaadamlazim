@@ -28,8 +28,8 @@ class MainIndex(webapp.RequestHandler):
                 if player == "":
                     continue
                 name, position = self.unserialize_player(player)
-                left = int(position[0])
-                top = int(position[1])
+                left = int(float(position[0])) # on iphone position may come as float number
+                top = int(float(position[1]))
                 color = "red" if i <= team_count else "blue"
                 players.append({"name": name, "left": left, "top": top, "color": color})
         else:
