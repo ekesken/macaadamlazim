@@ -34,20 +34,20 @@ class MainIndex(webapp.RequestHandler):
                 players.append({"name": name, "left": left, "top": top, "color": color})
         else:
             players = [
-               {"name": "player1", "left": 5, "top": 20, "color": "red"},
-               {"name": "player2", "left": 5, "top": 70, "color": "red"},
-               {"name": "player3", "left": 5, "top": 120, "color": "red"},
-               {"name": "player4", "left": 5, "top": 170, "color": "red"},
-               {"name": "player5", "left": 5, "top": 220, "color": "red"},
-               {"name": "player6", "left": 5, "top": 270, "color": "red"},
-               {"name": "player7", "left": 5, "top": 320, "color": "red"},
-               {"name": "player8", "left": 750, "top": 20, "color": "blue"},
-               {"name": "player9", "left": 750, "top": 70, "color": "blue"},
-               {"name": "player10", "left": 750, "top": 120, "color": "blue"},
-               {"name": "player11", "left": 750, "top": 170, "color": "blue"},
-               {"name": "player12", "left": 750, "top": 220, "color": "blue"},
-               {"name": "player13", "left": 750, "top": 270, "color": "blue"},
-               {"name": "player14", "left": 750, "top": 320, "color": "blue"}
+               {"name": "player1", "left": 100, "top": 150, "color": "red"},
+               {"name": "player2", "left": 100, "top": 300, "color": "red"},
+               {"name": "player3", "left": 200, "top": 50, "color": "red"},
+               {"name": "player4", "left": 200, "top": 220, "color": "red"},
+               {"name": "player5", "left": 200, "top": 400, "color": "red"},
+               {"name": "player6", "left": 325, "top": 125, "color": "red"},
+               {"name": "player7", "left": 325, "top": 325, "color": "red"},
+               {"name": "player8", "left": 650, "top": 150, "color": "blue"},
+               {"name": "player9", "left": 650, "top": 300, "color": "blue"},
+               {"name": "player10", "left": 550, "top": 50, "color": "blue"},
+               {"name": "player11", "left": 550, "top": 220, "color": "blue"},
+               {"name": "player12", "left": 550, "top": 400, "color": "blue"},
+               {"name": "player13", "left": 425, "top": 125, "color": "blue"},
+               {"name": "player14", "left": 425, "top": 325, "color": "blue"}
             ]
         values = {
             'players': [Player(**p) for p in players],
