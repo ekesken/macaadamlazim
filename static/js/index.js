@@ -29,6 +29,7 @@ $(window).load(function() {
         });
         $('#sharebox>input').val(shareurl)
         $('#sharebox').modal();
+        $('#sharebox>input').focus().select()
         return false;
     });
     $('#resetlink').click(function (e) {
